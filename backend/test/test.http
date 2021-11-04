@@ -1,0 +1,50 @@
+// Alle User abrufen
+###
+http://localhost:8080/publicUser
+
+//User mit Admin Rechte
+###
+POST http://localhost:8080/publicUser/sign
+Content-Type: application/json
+
+{
+    "userID": "admin",
+    "userName": "admin",
+    "password": "123",
+    "isAdministrator": true
+}
+
+
+//Admin User aufrufen
+###
+GET http://localhost:8080/publicUser/getByUserID
+Content-Type: application/json
+
+{
+    "userID": "admin"
+}
+
+//Zweiten User anlegen
+###
+POST http://localhost:8080/publicUser/sign
+Content-Type: application/json
+
+{
+    "userID": "manfred",
+    "userName": "Manfred Mustermann",
+    "password": "123",
+}
+
+//Namen des zweiten Users ändern
+###
+PUT http://localhost:8080/publicUser/
+Content-Type: application/json
+
+{
+    "userID": "manfred",
+    "userName": "Manfred Müller"
+}
+
+// Alle User abrufen
+###
+http://localhost:8080/publicUser

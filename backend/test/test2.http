@@ -1,0 +1,96 @@
+###
+//list users of database (Standard Admin ..)
+http://localhost:8080/publicUser
+
+
+##Admin: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODNkZGE0MjgzYjQ2MjI5OWVlMzg3ZiIsImlhdCI6MTYzNjAzMTkwOCwiZXhwIjoxNjM4NjIzOTA4fQ.9ClTHtyvupdU9V2cLm4zuXmdbsP9KPu4TAFoU3b16zw
+##Login Admin: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODNhNWJlMTZlYjA5NzBiODA0NTU1NSIsImlhdCI6MTYzNjAxOTI2MiwiZXhwIjoxNjM4NjExMjYyfQ.QiwUZG5zCz-5lN8zmiTc32VY-A0mg4Gz9hvVdECda8Y
+
+//register user
+###
+POST http://localhost:8080/authenticate/register
+Content-Type: application/json
+
+{
+    "userID": "admin",
+    "userName": "admin",
+    "password": "123",
+    "isAdministrator": true
+}
+
+//Normally authenticate User but not workin
+###
+POST http://localhost:8080/authenticate/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODNkZGE0MjgzYjQ2MjI5OWVlMzg3ZiIsImlhdCI6MTYzNjAzMTkwOCwiZXhwIjoxNjM4NjIzOTA4fQ.9ClTHtyvupdU9V2cLm4zuXmdbsP9KPu4TAFoU3b16zw
+#Content-Type: application/json
+#
+#{
+#    "userID": "admin",
+#    "password": "123"
+#    "isAdministrator": true
+#}
+
+
+// Login with wrong Basic Authentication  (should give an error)
+###
+POST http://localhost:8080/authenticate/
+Authorization: Basic admin:1234
+
+@adminToken = {{loginAdminCorrect.response.headers.Authorization}}
+
+//list all Users without Token (should give an error)
+###
+GET http://localhost:8080/user/
+
+//list all users with token(admin)
+###
+GET http://localhost:8080/user/
+Authorization: Basic eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJJRCI6ImFkbWluIn0sImlhdCI6MTYzNTk0NjA5NiwiZXhwIjoxMTYzNTk0NjA5Nn0.9EkNuBW2QN4vg3Cwp_LxnyAhSwPYeIj_Jc88io9X-AY
+
+// List all threads(Forum) without token
+###
+GET http://localhost:8080/forum/
+
+//Create Forum as Admin
+//Should work with admin token but isn´t
+###
+POST http://localhost:8080/forum/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJJRCI6ImFkbWluIn0sImlhdCI6MTYzNTk0NjA5NiwiZXhwIjoxMTYzNTk0NjA5Nn0.9EkNuBW2QN4vg3Cwp_LxnyAhSwPYeIj_Jc88io9X-AY
+Content-Type: application/json
+
+{
+    "forumName": "test",
+    "forumDescription": "test description",
+}
+
+
+//list all threads(Forum)
+###
+http://localhost:8080/forum/
+
+
+
+//Change forumDescription with Authentication
+
+PUT http://localhost:8080/forum/
+Authorization: Basic eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxODNhNWJlMTZlYjA5NzBiODA0NTU1NSIsImlhdCI6MTYzNjAxOTI2MiwiZXhwIjoxNjM4NjExMjYyfQ.QiwUZG5zCz-5lN8zmiTc32VY-A0mg4Gz9hvVdECda8Y
+Content-Type: application/json
+
+{
+    "_id": "6166a9f7532cfae4b927d808",
+    "forumDescription": "Das ist der neue Text 3"
+}
+
+###List all THreads(Forum) by admins (isAdministrator = true)
+GET http://localhost:8080/forum/getByOwnerID
+Authorization: Basic eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJJRCI6ImFkbWluIn0sImlhdCI6MTYzNTk0NjA5NiwiZXhwIjoxMTYzNTk0NjA5Nn0.9EkNuBW2QN4vg3Cwp_LxnyAhSwPYeIj_Jc88io9X-AY
+
+### list thread from user manfred (if exist) but only admin has access
+GET http://localhost:8080/forum/getByOwnerIDD
+Authorization: Basic eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJJRCI6ImFkbWluIn0sImlhdCI6MTYzNTk0NjA5NiwiZXhwIjoxMTYzNTk0NjA5Nn0.9EkNuBW2QN4vg3Cwp_LxnyAhSwPYeIj_Jc88io9X-AY
+Content-Type: application/json
+
+{
+    "ownerID" : "manfred"
+}
+
